@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer une commande</title>
+</head>
+<body>
+<h1>Créer une commande</h1>
+
+<a href="{% url 'liste_produits' %}">Retour aux produits</a>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Client :</label>
+    <select name="client_id">
+        {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.nom }} ({{ c.email }})</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Produit :</label>
+    <select name="produit_id">
+        {% for p in produits %}
+        <option value="{{ p.id }}">{{ p.nom }} (stock: {{ p.quantite_en_stock }})</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Quantité :</label>
+    <input type="number" name="quantite" value="1">
+    <br><br>
+
+    <button type="submit">Valider la commande</button>
+</form>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>

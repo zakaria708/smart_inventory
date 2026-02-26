@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un client</title>
+</head>
+<body>
+<h1>Ajouter un client</h1>
+
+<a href="{% url 'liste_produits' %}">Retour aux produits</a>
+
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label>Nom :</label>
+        <input type="text" name="nom" required>
+    </p>
+    <p>
+        <label>Email :</label>
+        <input type="email" name="email" required>
+    </p>
+
+    <button type="submit">Enregistrer</button>
+</form>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>

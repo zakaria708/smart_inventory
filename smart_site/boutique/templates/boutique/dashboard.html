@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Dashboard - Analyse des données</h1>
+
+<a href="{% url 'liste_produits' %}">Retour aux produits</a>
+
+<h2>Chiffre d'affaires par mois</h2>
+{% if ca_par_mois %}
+<table border="1" cellpadding="5">
+    <tr><th>Mois</th><th>Chiffre d'affaires</th></tr>
+    {% for mois, montant in ca_par_mois.items %}
+    <tr>
+        <td>{{ mois }}</td>
+        <td>{{ montant }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Aucune donnée.</p>
+{% endif %}
+
+<h2>Produits les plus vendus (par quantité)</h2>
+{% if ventes_par_produit %}
+<table border="1" cellpadding="5">
+    <tr><th>Produit</th><th>Quantité vendue</th></tr>
+    {% for nom, qte in ventes_par_produit.items %}
+    <tr>
+        <td>{{ nom }}</td>
+        <td>{{ qte }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Aucune donnée.</p>
+{% endif %}
+
+<h2>Valeur totale du stock</h2>
+<p>{{ valeur_stock_totale }}</p>
+
+<h2>Panier moyen</h2>
+<p>{{ panier_moyen }}</p>
+
+<h2>Fréquence d'achat des clients</h2>
+{% if frequence_clients %}
+<table border="1" cellpadding="5">
+    <tr><th>ID Client</th><th>Nombre de commandes</th></tr>
+    {% for cid, nb in frequence_clients.items %}
+    <tr>
+        <td>{{ cid }}</td>
+        <td>{{ nb }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Aucune donnée.</p>
+{% endif %}
+
+</body>
+</html>

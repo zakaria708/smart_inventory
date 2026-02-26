@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des produits</title>
+</head>
+<body>
+<h1>Liste des produits</h1>
+
+<p>
+    <a href="{% url 'creer_commande' %}">Créer une commande</a> |
+    <a href="{% url 'dashboard' %}">Voir le dashboard</a> |
+    <a href="{% url 'ajouter_produit' %}">Ajouter un produit</a> |
+    <a href="{% url 'ajouter_client' %}">Ajouter un client</a>
+</p>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Catégorie</th>
+        <th>Prix</th>
+        <th>Quantité en stock</th>
+        <th>Actions</th>
+    </tr>
+    {% for p in produits %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.nom }}</td>
+        <td>{{ p.categorie }}</td>
+        <td>{{ p.prix }}</td>
+        <td>{{ p.quantite_en_stock }}</td>
+        <td>
+            <a href="{% url 'modifier_stock' p.id %}">Modifier le stock</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">Aucun produit</td></tr>
+    {% endfor %}
+</table>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>

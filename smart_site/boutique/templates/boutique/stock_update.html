@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier le stock</title>
+</head>
+<body>
+<h1>Modifier le stock du produit : {{ produit.nom }}</h1>
+
+<a href="{% url 'liste_produits' %}">Retour à la liste des produits</a>
+
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label>Quantité en stock actuelle :</label>
+        <input type="number" name="quantite_en_stock"
+               value="{{ produit.quantite_en_stock }}" required>
+    </p>
+
+    <button type="submit">Mettre à jour</button>
+</form>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>
