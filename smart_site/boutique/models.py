@@ -12,7 +12,7 @@ class Produit(models.Model):
 
     class Meta:
         db_table = "produits"
-
+        unique_together = ("nom", "categorie")
     def __str__(self):
         return self.nom
 
@@ -20,7 +20,7 @@ class Produit(models.Model):
 class Client(models.Model):
     id = models.IntegerField(primary_key=True)
     nom = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
+    email = models.CharField(max_length=100,unique=True)
 
     class Meta:
         db_table = "clients"

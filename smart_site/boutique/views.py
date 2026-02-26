@@ -209,13 +209,18 @@ def ajouter_produit(request):
     return render(request, "boutique/produit_form.html")
 
 def ajouter_client(request):
-    """Créer un nouveau client (table clients)."""
+    """Créer un nouveau client (table clients) en évitant les doublons d'email."""
 
     if request.method == "POST":
         nom = request.POST.get("nom")
         email = request.POST.get("email")
 
-        # Générer un nouvel id (car id est IntegerField)
+        # 🔎 1) Vérifier si un client avec cet email existe déjà
+        if Client.objects.filter(email=email).exists():
+            messages.error(request, "Un client avec cet email existe déjà.")
+            return redirect("ajouter_client")
+
+        # 2) Générer un nouvel id (car id est IntegerField)
         nouveau_id = Client.objects.aggregate(max_id=models.Max("id"))["max_id"] or 0
         nouveau_id += 1
 
@@ -226,10 +231,10 @@ def ajouter_client(request):
         )
 
         messages.success(request, "Client ajouté avec succès.")
-        return redirect("creer_commande")  # ou liste_produits si tu préfères
+        # tu peux renvoyer vers liste_produits si tu préfères
+        return redirect("creer_commande")
 
     return render(request, "boutique/client_form.html")
-
 
 def modifier_stock(request, pk):
     """Modifier la quantité en stock d’un produit (table produits)."""
