@@ -204,7 +204,6 @@ def ajouter_produit(request):
         )
 
         messages.success(request, "Produit ajouté avec succès.")
-        return redirect("liste_produits")
 
     return render(request, "boutique/produit_form.html")
 
