@@ -31,7 +31,9 @@
         <td>{{ p.prix }}</td>
         <td>{{ p.quantite_en_stock }}</td>
         <td>
-            <a href="{% url 'modifier_stock' p.id %}">Modifier le stock</a>
+            <a href="{% url 'modifier_stock' p.id %}">Modifier le stock</a> |
+            <a href="{% url 'modifier_produit' p.id %}">Modifier</a> |
+            <a href="{% url 'supprimer_produit' p.id %}">Supprimer</a>
         </td>
     </tr>
     {% empty %}

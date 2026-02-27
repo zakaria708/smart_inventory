@@ -257,3 +257,57 @@ def modifier_stock(request, pk):
 
     # GET → afficher formulaire pré-rempli
     return render(request, "boutique/stock_update.html", {"produit": produit})
+def modifier_produit(request, pk):
+    """
+    Éditer un produit existant.
+    On peut changer: nom, catégorie, prix, quantité en stock.
+    """
+    produit = get_object_or_404(Produit, pk=pk)
+
+    if request.method == "POST":
+        nom = request.POST.get("nom")
+        categorie = request.POST.get("categorie")
+        prix_str = request.POST.get("prix")
+        stock_str = request.POST.get("quantite_en_stock")
+
+        # Vérifier doublon (autre produit avec même nom+catégorie)
+        if Produit.objects.filter(nom=nom, categorie=categorie).exclude(pk=pk).exists():
+            messages.error(request, "Un autre produit avec ce nom et cette catégorie existe déjà.")
+            return redirect("modifier_produit", pk=pk)
+
+        try:
+            prix = float(prix_str)
+            quantite_en_stock = int(stock_str)
+        except (ValueError, TypeError):
+            messages.error(request, "Prix ou quantité invalide.")
+            return redirect("modifier_produit", pk=pk)
+
+        produit.nom = nom
+        produit.categorie = categorie
+        produit.prix = prix
+        produit.quantite_en_stock = quantite_en_stock
+        produit.save()
+
+        messages.success(request, "Produit modifié avec succès.")
+        return redirect("liste_produits")
+
+    # GET → afficher formulaire pré-rempli
+    return render(request, "boutique/produit_edit.html", {"produit": produit})
+
+
+def supprimer_produit(request, pk):
+    """
+    Supprimer un produit.
+    ⚠ Attention: si ton modèle LigneCommande a un ForeignKey(produit, on_delete=models.CASCADE),
+    les lignes de commande liées pourraient aussi être supprimées.
+    """
+    produit = get_object_or_404(Produit, pk=pk)
+
+    if request.method == "POST":
+        nom = produit.nom
+        produit.delete()
+        messages.success(request, f"Produit '{nom}' supprimé.")
+        return redirect("liste_produits")
+
+    # GET → page de confirmation
+    return render(request, "boutique/produit_confirm_delete.html", {"produit": produit})
