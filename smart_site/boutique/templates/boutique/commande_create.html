@@ -1,46 +1,59 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Créer une commande</title>
-</head>
-<body>
-<h1>Créer une commande</h1>
+{% extends "boutique/base.html" %}
 
-<a href="{% url 'liste_produits' %}">Retour aux produits</a>
+{% block title %}Nouvelle commande – Smart Inventory{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    <label>Client :</label>
-    <select name="client_id">
-        {% for c in clients %}
-        <option value="{{ c.id }}">{{ c.nom }} ({{ c.email }})</option>
-        {% endfor %}
-    </select>
-    <br><br>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card card-shadow">
+            <div class="card-body">
+                <h1 class="h4 mb-3">Créer une commande</h1>
+                <p class="text-muted mb-4">
+                    Sélectionne le client, le produit et la quantité souhaitée.
+                </p>
 
-    <label>Produit :</label>
-    <select name="produit_id">
-        {% for p in produits %}
-        <option value="{{ p.id }}">{{ p.nom }} (stock: {{ p.quantite_en_stock }})</option>
-        {% endfor %}
-    </select>
-    <br><br>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Client</label>
+                        <select name="client_id" class="form-select" required>
+                            <option value="" selected disabled>Choisir un client…</option>
+                            {% for client in clients %}
+                                <option value="{{ client.id }}">
+                                    {{ client.nom }} ({{ client.email }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-    <label>Quantité :</label>
-    <input type="number" name="quantite" value="1">
-    <br><br>
+                    <div class="mb-3">
+                        <label class="form-label">Produit</label>
+                        <select name="produit_id" class="form-select" required>
+                            <option value="" selected disabled>Choisir un produit…</option>
+                            {% for produit in produits %}
+                                <option value="{{ produit.id }}">
+                                    {{ produit.nom }} – {{ produit.prix }} DH (Stock: {{ produit.quantite_en_stock }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-    <button type="submit">Valider la commande</button>
-</form>
+                    <div class="mb-3">
+                        <label class="form-label">Quantité</label>
+                        <input type="number" name="quantite" class="form-control" min="1" required>
+                    </div>
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-</body>
-</html>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
+                            Retour aux produits
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Valider la commande
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

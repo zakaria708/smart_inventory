@@ -1,43 +1,45 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Ajouter un produit</title>
-</head>
-<body>
-<h1>Ajouter un produit</h1>
+{% extends "boutique/base.html" %}
 
-<a href="{% url 'liste_produits' %}">Retour à la liste des produits</a>
+{% block title %}Ajouter un produit – Smart Inventory{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    <p>
-        <label>Nom :</label>
-        <input type="text" name="nom" required>
-    </p>
-    <p>
-        <label>Catégorie :</label>
-        <input type="text" name="categorie" required>
-    </p>
-    <p>
-        <label>Prix :</label>
-        <input type="number" name="prix" step="0.01" required>
-    </p>
-    <p>
-        <label>Quantité en stock :</label>
-        <input type="number" name="quantite_en_stock" required>
-    </p>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+        <div class="card card-shadow">
+            <div class="card-body">
+                <h1 class="h4 mb-3">Ajouter un produit</h1>
 
-    <button type="submit">Enregistrer</button>
-</form>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="nom" class="form-control" required>
+                    </div>
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <input type="text" name="categorie" class="form-control" required>
+                    </div>
 
-</body>
-</html>
+                    <div class="mb-3">
+                        <label class="form-label">Prix (DH)</label>
+                        <input type="number" name="prix" step="0.01" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantité en stock</label>
+                        <input type="number" name="quantite_en_stock" class="form-control" required>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

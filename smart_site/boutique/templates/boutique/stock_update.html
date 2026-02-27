@@ -1,32 +1,43 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier le stock</title>
-</head>
-<body>
-<h1>Modifier le stock du produit : {{ produit.nom }}</h1>
+{% extends "boutique/base.html" %}
 
-<a href="{% url 'liste_produits' %}">Retour à la liste des produits</a>
+{% block title %}Modifier le stock – Smart Inventory{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    <p>
-        <label>Quantité en stock actuelle :</label>
-        <input type="number" name="quantite_en_stock"
-               value="{{ produit.quantite_en_stock }}" required>
-    </p>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+        <div class="card card-shadow">
+            <div class="card-body">
+                <h1 class="h4 mb-3">
+                    Modifier le stock
+                </h1>
+                <p class="text-muted mb-4">
+                    Produit : <strong>{{ produit.nom }}</strong>
+                </p>
 
-    <button type="submit">Mettre à jour</button>
-</form>
+                <form method="post">
+                    {% csrf_token %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+                    <div class="mb-3">
+                        <label class="form-label">Quantité en stock</label>
+                        <input type="number"
+                               name="quantite_en_stock"
+                               value="{{ produit.quantite_en_stock }}"
+                               class="form-control"
+                               min="0"
+                               required>
+                    </div>
 
-</body>
-</html>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Mettre à jour
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

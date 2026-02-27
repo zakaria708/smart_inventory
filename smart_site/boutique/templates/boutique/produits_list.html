@@ -1,53 +1,68 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Liste des produits</title>
-</head>
-<body>
-<h1>Liste des produits</h1>
+{% extends "boutique/base.html" %}
 
-<p>
-    <a href="{% url 'creer_commande' %}">Créer une commande</a> |
-    <a href="{% url 'dashboard' %}">Voir le dashboard</a> |
-    <a href="{% url 'ajouter_produit' %}">Ajouter un produit</a> |
-    <a href="{% url 'ajouter_client' %}">Ajouter un client</a>
-</p>
+{% block title %}Produits – Smart Inventory{% endblock %}
 
-<table border="1" cellpadding="5">
-    <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Catégorie</th>
-        <th>Prix</th>
-        <th>Quantité en stock</th>
-        <th>Actions</th>
-    </tr>
-    {% for p in produits %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.nom }}</td>
-        <td>{{ p.categorie }}</td>
-        <td>{{ p.prix }}</td>
-        <td>{{ p.quantite_en_stock }}</td>
-        <td>
-            <a href="{% url 'modifier_stock' p.id %}">Modifier le stock</a> |
-            <a href="{% url 'modifier_produit' p.id %}">Modifier</a> |
-            <a href="{% url 'supprimer_produit' p.id %}">Supprimer</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6">Aucun produit</td></tr>
-    {% endfor %}
-</table>
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h3 mb-1">Produits</h1>
+        <p class="text-muted mb-0">Vue d’ensemble de tous les articles en stock.</p>
+    </div>
+    <div class="text-end">
+        <a href="{% url 'ajouter_produit' %}" class="btn btn-sm btn-primary mb-1">+ Ajouter un produit</a>
+        <a href="{% url 'ajouter_client' %}" class="btn btn-sm btn-outline-primary mb-1">+ Ajouter un client</a>
+    </div>
+</div>
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-</body>
-</html>
+<div class="card card-shadow">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th class="text-nowrap">ID</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th class="text-end">Prix</th>
+                <th class="text-end">Stock</th>
+                <th class="text-center text-nowrap">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in produits %}
+                <tr>
+                    <td class="text-muted">{{ p.id }}</td>
+                    <td>{{ p.nom }}</td>
+                    <td><span class="badge bg-secondary-subtle text-secondary">{{ p.categorie }}</span></td>
+                    <td class="text-end">{{ p.prix }} DH</td>
+                    <td class="text-end {% if p.quantite_en_stock <= 3 %}text-danger fw-semibold{% endif %}">
+                        {{ p.quantite_en_stock }}
+                    </td>
+                    <td class="text-center text-nowrap">
+                        <a href="{% url 'modifier_stock' p.id %}" class="btn btn-sm btn-outline-secondary">
+                            Stock
+                        </a>
+                        <a href="{% url 'modifier_produit' p.id %}" class="btn btn-sm btn-outline-primary">
+                            Modifier
+                        </a>
+                        <a href="{% url 'supprimer_produit' p.id %}" class="btn btn-sm btn-outline-danger">
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        Aucun produit pour le moment. Commence par en créer un 👇
+                        <div class="mt-2">
+                            <a href="{% url 'ajouter_produit' %}" class="btn btn-primary btn-sm">
+                                Ajouter un produit
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

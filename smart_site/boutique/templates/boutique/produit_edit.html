@@ -1,43 +1,71 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier un produit</title>
-</head>
-<body>
-<h1>Modifier le produit : {{ produit.nom }}</h1>
+{% extends "boutique/base.html" %}
 
-<a href="{% url 'liste_produits' %}">Retour à la liste des produits</a>
+{% block title %}Modifier un produit – Smart Inventory{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    <p>
-        <label>Nom :</label>
-        <input type="text" name="nom" value="{{ produit.nom }}" required>
-    </p>
-    <p>
-        <label>Catégorie :</label>
-        <input type="text" name="categorie" value="{{ produit.categorie }}" required>
-    </p>
-    <p>
-        <label>Prix :</label>
-        <input type="number" name="prix" step="0.01" value="{{ produit.prix }}" required>
-    </p>
-    <p>
-        <label>Quantité en stock :</label>
-        <input type="number" name="quantite_en_stock" value="{{ produit.quantite_en_stock }}" required>
-    </p>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card card-shadow">
+            <div class="card-body">
+                <h1 class="h4 mb-3">
+                    Modifier le produit
+                </h1>
+                <p class="text-muted mb-4">
+                    Produit : <strong>{{ produit.nom }}</strong>
+                </p>
 
-    <button type="submit">Enregistrer les modifications</button>
-</form>
+                <form method="post">
+                    {% csrf_token %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text"
+                               name="nom"
+                               value="{{ produit.nom }}"
+                               class="form-control"
+                               required>
+                    </div>
 
-</body>
-</html>
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <input type="text"
+                               name="categorie"
+                               value="{{ produit.categorie }}"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Prix (DH)</label>
+                        <input type="number"
+                               step="0.01"
+                               name="prix"
+                               value="{{ produit.prix }}"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantité en stock</label>
+                        <input type="number"
+                               name="quantite_en_stock"
+                               value="{{ produit.quantite_en_stock }}"
+                               class="form-control"
+                               min="0"
+                               required>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
